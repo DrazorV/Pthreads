@@ -47,10 +47,10 @@ RM = "E:\Program Files (x86)\JetBrains\CLion 2018.2.6\bin\cmake\win\bin\cmake.ex
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\Drazor\CLionProjects\CPP Assignment\operating-systems1"
+CMAKE_SOURCE_DIR = C:\Users\Drazor\CLionProjects\operating-systems1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\Drazor\CLionProjects\CPP Assignment\operating-systems1\cmake-build-debug"
+CMAKE_BINARY_DIR = C:\Users\Drazor\CLionProjects\operating-systems1\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -79,9 +79,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\Drazor\CLionProjects\CPP Assignment\operating-systems1\cmake-build-debug\CMakeFiles" "C:\Users\Drazor\CLionProjects\CPP Assignment\operating-systems1\cmake-build-debug\CMakeFiles\progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Drazor\CLionProjects\operating-systems1\cmake-build-debug\CMakeFiles C:\Users\Drazor\CLionProjects\operating-systems1\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\Drazor\CLionProjects\CPP Assignment\operating-systems1\cmake-build-debug\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Drazor\CLionProjects\operating-systems1\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -122,6 +122,33 @@ operating_systems1/fast:
 	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/build
 .PHONY : operating_systems1/fast
 
+declarations.obj: declarations.c.obj
+
+.PHONY : declarations.obj
+
+# target to build an object file
+declarations.c.obj:
+	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/declarations.c.obj
+.PHONY : declarations.c.obj
+
+declarations.i: declarations.c.i
+
+.PHONY : declarations.i
+
+# target to preprocess a source file
+declarations.c.i:
+	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/declarations.c.i
+.PHONY : declarations.c.i
+
+declarations.s: declarations.c.s
+
+.PHONY : declarations.s
+
+# target to generate assembly for a file
+declarations.c.s:
+	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/declarations.c.s
+.PHONY : declarations.c.s
+
 main.obj: main.c.obj
 
 .PHONY : main.obj
@@ -158,6 +185,9 @@ help:
 	@echo ... operating_systems1
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... declarations.obj
+	@echo ... declarations.i
+	@echo ... declarations.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

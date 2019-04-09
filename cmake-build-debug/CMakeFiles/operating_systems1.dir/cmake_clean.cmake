@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/operating_systems1.dir/declarations.c.obj"
   "CMakeFiles/operating_systems1.dir/main.c.obj"
   "operating_systems1.pdb"
   "operating_systems1.exe"
