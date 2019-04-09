@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Drazor/CLionProjects/CPP Assignment/operating-systems1/main.c
+pthread.h
+-
+stdio.h
+-
+stdlib.h
+-
+
