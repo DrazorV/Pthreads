@@ -149,32 +149,32 @@ declarations.c.s:
 	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/declarations.c.s
 .PHONY : declarations.c.s
 
-main.obj: main.c.obj
+p3150134-p3140137-res1.obj: p3150134-p3140137-res1.c.obj
 
-.PHONY : main.obj
+.PHONY : p3150134-p3140137-res1.obj
 
 # target to build an object file
-main.c.obj:
-	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/main.c.obj
-.PHONY : main.c.obj
+p3150134-p3140137-res1.c.obj:
+	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.obj
+.PHONY : p3150134-p3140137-res1.c.obj
 
-main.i: main.c.i
+p3150134-p3140137-res1.i: p3150134-p3140137-res1.c.i
 
-.PHONY : main.i
+.PHONY : p3150134-p3140137-res1.i
 
 # target to preprocess a source file
-main.c.i:
-	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/main.c.i
-.PHONY : main.c.i
+p3150134-p3140137-res1.c.i:
+	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.i
+.PHONY : p3150134-p3140137-res1.c.i
 
-main.s: main.c.s
+p3150134-p3140137-res1.s: p3150134-p3140137-res1.c.s
 
-.PHONY : main.s
+.PHONY : p3150134-p3140137-res1.s
 
 # target to generate assembly for a file
-main.c.s:
-	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/main.c.s
-.PHONY : main.c.s
+p3150134-p3140137-res1.c.s:
+	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.s
+.PHONY : p3150134-p3140137-res1.c.s
 
 # Help Target
 help:
@@ -188,9 +188,9 @@ help:
 	@echo ... declarations.obj
 	@echo ... declarations.i
 	@echo ... declarations.s
-	@echo ... main.obj
-	@echo ... main.i
-	@echo ... main.s
+	@echo ... p3150134-p3140137-res1.obj
+	@echo ... p3150134-p3140137-res1.i
+	@echo ... p3150134-p3140137-res1.s
 .PHONY : help
 
 

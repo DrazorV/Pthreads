@@ -5,4 +5,4 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(operating_systems1
         declarations.c
-        main.c)
+        p3150134-p3140137-res1.c p3150134-p3140137-res1.h)

@@ -77,7 +77,10 @@
 		<Unit filename="C:/Users/Drazor/CLionProjects/operating-systems1/declarations.c">
 			<Option target="operating_systems1"/>
 		</Unit>
-		<Unit filename="C:/Users/Drazor/CLionProjects/operating-systems1/main.c">
+		<Unit filename="C:/Users/Drazor/CLionProjects/operating-systems1/p3150134-p3140137-res1.c">
+			<Option target="operating_systems1"/>
+		</Unit>
+		<Unit filename="C:/Users/Drazor/CLionProjects/operating-systems1/p3150134-p3140137-res1.h">
 			<Option target="operating_systems1"/>
 		</Unit>
 		<Unit filename="C:/Users/Drazor/CLionProjects/operating-systems1/CMakeLists.txt">

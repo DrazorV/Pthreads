@@ -69,29 +69,29 @@ CMakeFiles/operating_systems1.dir/declarations.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/operating_systems1.dir/declarations.c.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Drazor\CLionProjects\operating-systems1\declarations.c -o CMakeFiles\operating_systems1.dir\declarations.c.s
 
-CMakeFiles/operating_systems1.dir/main.c.obj: CMakeFiles/operating_systems1.dir/flags.make
-CMakeFiles/operating_systems1.dir/main.c.obj: ../main.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Drazor\CLionProjects\operating-systems1\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/operating_systems1.dir/main.c.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\operating_systems1.dir\main.c.obj   -c C:\Users\Drazor\CLionProjects\operating-systems1\main.c
+CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.obj: CMakeFiles/operating_systems1.dir/flags.make
+CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.obj: ../p3150134-p3140137-res1.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\Drazor\CLionProjects\operating-systems1\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.obj"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\operating_systems1.dir\p3150134-p3140137-res1.c.obj   -c C:\Users\Drazor\CLionProjects\operating-systems1\p3150134-p3140137-res1.c
 
-CMakeFiles/operating_systems1.dir/main.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/operating_systems1.dir/main.c.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Drazor\CLionProjects\operating-systems1\main.c > CMakeFiles\operating_systems1.dir\main.c.i
+CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.i"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Drazor\CLionProjects\operating-systems1\p3150134-p3140137-res1.c > CMakeFiles\operating_systems1.dir\p3150134-p3140137-res1.c.i
 
-CMakeFiles/operating_systems1.dir/main.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/operating_systems1.dir/main.c.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Drazor\CLionProjects\operating-systems1\main.c -o CMakeFiles\operating_systems1.dir\main.c.s
+CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.s"
+	C:\PROGRA~1\MINGW-~1\X86_64~1.0-P\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Drazor\CLionProjects\operating-systems1\p3150134-p3140137-res1.c -o CMakeFiles\operating_systems1.dir\p3150134-p3140137-res1.c.s
 
 # Object files for target operating_systems1
 operating_systems1_OBJECTS = \
 "CMakeFiles/operating_systems1.dir/declarations.c.obj" \
-"CMakeFiles/operating_systems1.dir/main.c.obj"
+"CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.obj"
 
 # External object files for target operating_systems1
 operating_systems1_EXTERNAL_OBJECTS =
 
 operating_systems1.exe: CMakeFiles/operating_systems1.dir/declarations.c.obj
-operating_systems1.exe: CMakeFiles/operating_systems1.dir/main.c.obj
+operating_systems1.exe: CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.obj
 operating_systems1.exe: CMakeFiles/operating_systems1.dir/build.make
 operating_systems1.exe: CMakeFiles/operating_systems1.dir/linklibs.rsp
 operating_systems1.exe: CMakeFiles/operating_systems1.dir/objects1.rsp
