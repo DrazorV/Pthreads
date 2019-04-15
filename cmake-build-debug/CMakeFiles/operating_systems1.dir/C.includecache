@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Drazor/CLionProjects/operating-systems1/p3150134-p3140137-res1.c
+pthread.h
+-
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+time.h
+-
+stdbool.h
+-
+p3150134-p3140137-res1.h
+C:/Users/Drazor/CLionProjects/operating-systems1/p3150134-p3140137-res1.h
+
+C:/Users/Drazor/CLionProjects/operating-systems1/p3150134-p3140137-res1.h
+

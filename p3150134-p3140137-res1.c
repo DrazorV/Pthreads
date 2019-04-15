@@ -6,24 +6,25 @@
 #include <stdbool.h>
 #include "p3150134-p3140137-res1.h"
 
-
-int * seats , totInc , totW8 , totServ , operator , sCounter , transcount;
-char *ptr;
-void Output(int customer) ;
+int * seats , totInc , totW8 , totServ , operator , sCounter , transcount , RandomSeed;
 void *Reservation(void *threadId);
 
-pthread_mutex_t lock , MtotInc , MtotW8 , MtotServ , Mplan , Mcounter , Mpr;
+pthread_mutex_t Moperator , MtotInc , MtotW8 , MtotServ , Mtrans , Mprint , Mtest;
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
 int main(int argc, char *argv[]) {
+    //THREAD_ARGS threadArgs;
+    totInc = 0, transcount = 0, totW8 = 0, totServ = 0, sCounter = 0;
+    operator = Ntel;
 
     if (argc != 3) {
         printf("ERROR: the program should take two arguments, the number of threads to create and the random seed!\n");
         exit(-1);
     }
 
+    char *ptr;
     int Ncust = strtol(argv[1], &ptr, 0);
-    int RandomSeed = strtol(argv[2], &ptr, 0);
+    RandomSeed = strtol(argv[2], &ptr, 0);
 
     if (Ncust < 0) {
         printf("ERROR: the Ncust should be a positive number. Current number given %d.\n", Ncust);
@@ -31,8 +32,6 @@ int main(int argc, char *argv[]) {
     }
 
     printf("Customers: %d, Seed: %d.\n", Ncust, RandomSeed);
-
-    srand((unsigned int) RandomSeed);
 
     seats = (int *) malloc(sizeof (int) * Nseat);
 
@@ -43,149 +42,135 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < Nseat; i++) seats[i] = -1;
 
-    pthread_t *threads;
-    threads = malloc(Ncust * sizeof(pthread_t));
+    pthread_t *threads = malloc(Ncust * sizeof(pthread_t));
 
     if (threads == NULL) {
         printf("NOT ENOUGH MEMORY!\n");
         return -1;
     }
 
-    int rc;
-    int threadCount;
+    int i;
     int countArray[Ncust];
-    for (threadCount = 0; threadCount < Ncust; threadCount++) {
-        printf("Main: creating thread %d\n", threadCount + 1);
-        countArray[threadCount] = threadCount + 1;
-        rc = pthread_create(&threads[threadCount], NULL, Reservation, &countArray[threadCount]);
 
-        if (rc != 0) {
-            printf("ERROR: return code from pthread_create() is %d\n", rc);
-            exit(-1);
-        }
+    for (i = 0; i < Ncust; i++) {
+        countArray[i] = i + 1;
+        pthread_create(&threads[i], NULL, Reservation, &countArray[i]);
     }
 
-    void *status;
-    for (threadCount = 0; threadCount < Ncust; threadCount++) {
-        rc = pthread_join(threads[threadCount], &status);
-
-        if (rc != 0) {
-            printf("ERROR: return code from pthread_join() is %d\n", rc);
-            exit(-1);
-        }
-
-        printf("Main: Thread %d returned %d as status code.\n", countArray[threadCount], (*(int *) status));
+    for (i = 0; i < Ncust; i++) {
+        pthread_join(threads[i], NULL);
     }
 
-    pthread_mutex_destroy(&lock);
+    for (i= 0; i < Nseat; i++) {
+        if(seats[i] == -1) printf("Seat %d is empty\n", i + 1);
+        else printf("Seat %d is taken from Customer %d\n", i + 1, *(seats + i));
+    }
+
+    printf("Total Income: %d euros.\n", totInc);
+    printf("Average waiting time: %f.\n", (double)totW8/(double)Ncust);
+    printf("Average service time: %f.\n\n", (double)totServ/(double)Ncust);
+
+
+    pthread_mutex_destroy(&Moperator);
+    pthread_mutex_destroy(&MtotInc);
+    pthread_mutex_destroy(&MtotW8);
+    pthread_mutex_destroy(&MtotServ);
+    pthread_mutex_destroy(&Mtrans);
+    pthread_mutex_destroy(&Mprint);
     pthread_cond_destroy(&cond);
-
-    Output(Ncust);
+    pthread_mutex_destroy(&Mtest);
 
     free(seats);
     free(threads);
-    return 1;
-}
-
-void Output(int cust){
-    for (int i = 0; i < Nseat; i++) {
-        if(seats[i]==-1)printf("Seat %d / Empty\n", i+1);
-        else printf("Seat %d / Customer %d\n", i+1, *(seats + i));
-    }
-
-    printf("\nTotal Income: %d euros.\n", totInc);
-    printf("\nAverage waiting time: %f.\n", (double)totW8/(double)cust);
-    printf("\nAverage service time: %f.\n\n", (double)totServ/(double)cust);
+    return 0;
 }
 
 void *Reservation(void *threadId) {
-    unsigned int randSeats = (unsigned int) rand() % (Nseathigh - Nseatlow + 1) + Nseatlow;
-    unsigned int randTime = (unsigned int) (rand() % (tseathigh - tseatlow + 1) + tseatlow);
-    unsigned int randSuccess = (unsigned int) rand() % 100;
-
+    int *thread = (int *)threadId;
     struct timespec start, mid, end;
     time_t start_time , mid_time , end_time;
     clock_gettime(CLOCK_REALTIME, &start);
     start_time = start.tv_sec;
 
-    int *tid = threadId;
+    int n = rand_r(RandomSeed ) * (*thread) * (int) time(NULL);
+    unsigned int randSeats = (unsigned int) n % (Nseathigh - Nseatlow + 1) + Nseatlow;
+    unsigned int randTime = (unsigned int) n % (tseathigh - tseatlow + 1) + tseatlow;
+    int  randSuccess = n % 100;
 
-    int rc = pthread_mutex_lock(&lock);
-
-    while (operator == 0) rc = pthread_cond_wait(&cond, &lock);
+    pthread_mutex_lock(&Moperator);
+    while (operator == 0) pthread_cond_wait(&cond, &Moperator);
 
     clock_gettime(CLOCK_REALTIME,&mid);
     mid_time = mid.tv_sec;
+
     operator--;
+    pthread_mutex_unlock(&Moperator);
 
-    rc = pthread_mutex_unlock(&lock);
-    rc = pthread_mutex_lock(&MtotW8);
 
-    totW8+= (mid_time-start_time);
-
-    rc = pthread_mutex_unlock(&MtotW8);
+    pthread_mutex_lock(&MtotW8);
+    totW8 += mid_time - start_time;
+    pthread_mutex_unlock(&MtotW8);
 
     sleep(randTime);
+
     clock_gettime(CLOCK_REALTIME,&end);
     end_time = end.tv_sec;
 
-    rc = pthread_mutex_lock(&MtotServ);
-    totServ += (end_time-start_time);
-    rc = pthread_mutex_unlock(&MtotServ);
-    rc = pthread_mutex_lock(&Mplan);
 
+    pthread_mutex_lock(&MtotServ);
+    totServ += end_time - start_time;
+    pthread_mutex_unlock(&MtotServ);
+
+    pthread_mutex_lock(&Mtest);
     bool flag = false;
 
     if (sCounter == Nseat){
-        printf("The reservation for customer: %d could not be accepted because the theater is full.\n", *tid);
+        printf("The reservation for customer %d could not be accepted because the theater is full.\n", *thread);
         flag = true;
     }else if (sCounter + randSeats > Nseat){
-        printf("The reservation for customer: %d could not be accepted because there are not available seats.\n", *tid);
+        printf("The reservation for customer %d could not be accepted because there are not available seats.\n", *thread);
         flag = true;
-    }else if (randSuccess > Pcardsuccess - 1){
-        printf("The reservation for customer: %d could not be accepted because the credit card transaction was not approved.\n", *tid);
+    }else if (randSuccess > Pcardsuccess * 100) {
+        printf("The reservation for customer %d could not be accepted because the credit card transaction was not approved.\n",*thread);
         flag = true;
     }
 
     if(flag){
-        rc = pthread_mutex_unlock(&Mplan);
-        rc = pthread_mutex_lock(&lock);
+        pthread_mutex_unlock(&Mtest);
+        pthread_mutex_lock(&Moperator);
         operator++;
-        rc = pthread_cond_signal(&cond);
-        rc = pthread_mutex_unlock(&lock);
-        pthread_exit(tid);
+        pthread_cond_signal(&cond);
+        pthread_mutex_unlock(&Moperator);
+        pthread_exit(thread);
     }
 
-    for (int i = sCounter; i < sCounter + randSeats ; i++) seats[i]=*tid;
+    for (int i = sCounter; i < sCounter + randSeats ; i++) seats[i] = *thread;
+
     int temp = sCounter + 1;
     sCounter += randSeats;
     int temp2 = sCounter;
-    rc = pthread_mutex_unlock(&Mplan);
 
-    rc = pthread_mutex_lock(&MtotInc);
-    totInc += randSeats*Cseat;
-    rc = pthread_mutex_unlock(&MtotInc);
+    pthread_mutex_unlock(&Mtest);
 
-    rc = pthread_mutex_lock(&Mcounter);
-    int count = transcount;
+    pthread_mutex_lock(&MtotInc);
+    totInc += randSeats * Cseat;
+    pthread_mutex_unlock(&MtotInc);
+
+    pthread_mutex_lock(&Mtrans);
+    int TransId = transcount;
     transcount++;
-    rc = pthread_mutex_unlock(&Mcounter);
+    pthread_mutex_unlock(&Mtrans);
 
-    rc = pthread_mutex_lock(&Mpr);
-
-    printf("Πελάτης %d:\nΗ κράτηση ολοκληρώθηκε επιτυχώς.\nΟ αριθμός συναλλαγής είναι <%d>", *tid, count);
-    printf(", οι θέσεις σας είναι οι <%d", temp);
-    for(int i = temp + 1; i <= temp2; i++) printf(", %d",i);
-
-    printf("> και το κόστος της συναλλαγής είναι <%d> ευρώ.\n", randSeats * Cseat);
-    rc = pthread_mutex_unlock(&Mpr);
-
-
-    rc = pthread_mutex_lock(&lock);
-
+    pthread_mutex_lock(&Mprint);
+    pthread_mutex_lock(&Mtest);
+    printf("The reservation was successful for customer %d with id %d, your seats are [%d", *thread , TransId , temp);
+    for(int i = temp + 1; i <= temp2; i++) printf(",%d", i);
+    printf("] and the transaction cost is %d euros.\n", randSeats * Cseat);
+    pthread_mutex_unlock(&Mprint);
+    pthread_mutex_unlock(&Mtest);
+    pthread_mutex_lock(&Moperator);
     operator++;
-    rc = pthread_cond_signal(&cond);
-    rc = pthread_mutex_unlock(&lock);
-
-    pthread_exit(tid);
+    pthread_cond_signal(&cond);
+    pthread_mutex_unlock(&Moperator);
+    pthread_exit(thread);
 }

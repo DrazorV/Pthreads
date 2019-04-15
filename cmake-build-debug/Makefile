@@ -122,33 +122,6 @@ operating_systems1/fast:
 	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/build
 .PHONY : operating_systems1/fast
 
-declarations.obj: declarations.c.obj
-
-.PHONY : declarations.obj
-
-# target to build an object file
-declarations.c.obj:
-	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/declarations.c.obj
-.PHONY : declarations.c.obj
-
-declarations.i: declarations.c.i
-
-.PHONY : declarations.i
-
-# target to preprocess a source file
-declarations.c.i:
-	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/declarations.c.i
-.PHONY : declarations.c.i
-
-declarations.s: declarations.c.s
-
-.PHONY : declarations.s
-
-# target to generate assembly for a file
-declarations.c.s:
-	$(MAKE) -f CMakeFiles\operating_systems1.dir\build.make CMakeFiles/operating_systems1.dir/declarations.c.s
-.PHONY : declarations.c.s
-
 p3150134-p3140137-res1.obj: p3150134-p3140137-res1.c.obj
 
 .PHONY : p3150134-p3140137-res1.obj
@@ -185,9 +158,6 @@ help:
 	@echo ... operating_systems1
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... declarations.obj
-	@echo ... declarations.i
-	@echo ... declarations.s
 	@echo ... p3150134-p3140137-res1.obj
 	@echo ... p3150134-p3140137-res1.i
 	@echo ... p3150134-p3140137-res1.s
