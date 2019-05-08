@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <stdbool.h>
-#include "p3150134-p3140137-res1.h"
+#include "p3150134-p3140137-res2.h"
 
 int * seats , totInc , totW8 , totServ , operator , sCounter , transcount , RandomSeed;
 void *Reservation(void *threadId);
