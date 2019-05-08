@@ -6,16 +6,27 @@
 #include <stdbool.h>
 #include "p3150134-p3140137-res2.h"
 
-int * seats , totInc , totW8 , totServ , operator , sCounter , transcount , RandomSeed;
+int * seats , totInc , totW8 , totServ , operator, cashier , sCounter , transcount , RandomSeed, MaxSeats = (NzoneA + NzoneB + NzoneC)*Nseat;
 void *Reservation(void *threadId);
+void *Transaction(void *arguments);
 
 pthread_mutex_t Moperator , MtotInc , MtotW8 , MtotServ , Mtrans , Mprint , Mtest;
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+pthread_mutex_t Mcashier, MtotW82, MtotServ2, Mtest2;
+
+typedef struct arg_struct {
+    char zone;
+    int seats;
+    int cseats;
+    int transID;
+} Args;
 
 int main(int argc, char *argv[]) {
     //THREAD_ARGS threadArgs;
     totInc = 0, transcount = 0, totW8 = 0, totServ = 0, sCounter = 0;
     operator = Ntel;
+    cashier = Ncash;
 
     if (argc != 3) {
         printf("ERROR: the program should take two arguments, the number of threads to create and the random seed!\n");
@@ -33,14 +44,14 @@ int main(int argc, char *argv[]) {
 
     printf("Customers: %d, Seed: %d.\n", Ncust, RandomSeed);
 
-    seats = (int *) malloc(sizeof (int) * Nseat);
+    seats = (int *) malloc(sizeof (int) * MaxSeats);
 
     if (seats == NULL) {
         printf("NOT ENOUGH MEMORY!\n");
         return -1;
     }
 
-    for (int i = 0; i < Nseat; i++) seats[i] = -1;
+    for (int i = 0; i < MaxSeats; i++) seats[i] = -1;
 
     pthread_t *threads = malloc(Ncust * sizeof(pthread_t));
 
@@ -58,10 +69,13 @@ int main(int argc, char *argv[]) {
     }
 
     for (i = 0; i < Ncust; i++) {
-        pthread_join(threads[i], NULL);
+        Args *res;
+        pthread_join(threads[i], &res);
+        pthread_create(&threads[i], NULL, Transaction, &res);
+        free(res);
     }
 
-    for (i= 0; i < Nseat; i++) {
+    for (i= 0; i < MaxSeats; i++) {
         if(seats[i] == -1) printf("Seat %d is empty\n", i + 1);
         else printf("Seat %d is taken from Customer %d\n", i + 1, *(seats + i));
     }
@@ -92,10 +106,12 @@ void *Reservation(void *threadId) {
     clock_gettime(CLOCK_REALTIME, &start);
     start_time = start.tv_sec;
 
-    int n = rand_r(RandomSeed ) * (*thread) * (int) time(NULL);
-    unsigned int randSeats = (unsigned int) n % (Nseathigh - Nseatlow + 1) + Nseatlow;
-    unsigned int randTime = (unsigned int) n % (tseathigh - tseatlow + 1) + tseatlow;
-    int  randSuccess = n % 100;
+
+    unsigned int n = (unsigned int) (RandomSeed * (*thread) * (int) time(NULL));
+    rand_r(&n);
+    unsigned int randSeats = n % (Nseathigh - Nseatlow + 1) + Nseatlow;
+    unsigned int randTime = n % (tseathigh - tseatlow + 1) + tseatlow;
+    int randZone = n % 100;
 
     pthread_mutex_lock(&Moperator);
     while (operator == 0) pthread_cond_wait(&cond, &Moperator);
@@ -106,6 +122,18 @@ void *Reservation(void *threadId) {
     operator--;
     pthread_mutex_unlock(&Moperator);
 
+    int Cseat;
+    char zone;
+    if(randZone <= 20){
+        Cseat = CzoneA;
+        zone = 'A';
+    }else if (randZone <= 60){
+        Cseat = CzoneB;
+        zone = 'B';
+    }else{
+        Cseat = CzoneC;
+        zone = 'C';
+    }
 
     pthread_mutex_lock(&MtotW8);
     totW8 += mid_time - start_time;
@@ -130,30 +158,91 @@ void *Reservation(void *threadId) {
     }else if (sCounter + randSeats > Nseat){
         printf("The reservation for customer %d could not be accepted because there are not available seats.\n", *thread);
         flag = true;
-    }else if (randSuccess > Pcardsuccess * 100) {
-        printf("The reservation for customer %d could not be accepted because the credit card transaction was not approved.\n",*thread);
+    }
+
+    pthread_mutex_unlock(&Mtest);
+    pthread_mutex_lock(&Moperator);
+    operator++;
+    pthread_cond_signal(&cond);
+    pthread_mutex_unlock(&Moperator);
+
+    if(flag){
+        pthread_exit(0);
+    }else{
+        Args *args = malloc(sizeof(Args));
+        args->zone = zone;
+        args->seats = randSeats;
+        args->transID = *thread;
+        args->cseats = Cseat;
+        pthread_exit(args);
+    }
+}
+
+void *Transaction(void *arguments) {
+    Args *args = arguments;
+    struct timespec start, mid, end;
+    time_t start_time , mid_time , end_time;
+    clock_gettime(CLOCK_REALTIME, &start);
+    start_time = start.tv_sec;
+
+    unsigned int n2 = (unsigned int) (RandomSeed * (int) time(NULL));
+    rand_r(&n2);
+    unsigned int randTime = n2 % (tCashHigh - tCashLow + 1) + tCashLow;
+    int randSuccess = n2 % 100;
+
+    pthread_mutex_lock(&Mcashier);
+
+    while (cashier == 0) pthread_cond_wait(&cond, &Moperator);
+
+    clock_gettime(CLOCK_REALTIME,&mid);
+    mid_time = mid.tv_sec;
+
+    cashier--;
+    pthread_mutex_unlock(&Mcashier);
+
+    pthread_mutex_lock(&MtotW82);
+    totW8 += mid_time - start_time;
+    pthread_mutex_unlock(&MtotW82);
+
+    sleep(randTime);
+
+    clock_gettime(CLOCK_REALTIME,&end);
+    end_time = end.tv_sec;
+
+
+    pthread_mutex_lock(&MtotServ2);
+    totServ += end_time - start_time;
+    pthread_mutex_unlock(&MtotServ2);
+
+    pthread_mutex_lock(&Mtest2);
+
+    bool flag = false;
+
+
+    if (randSuccess > Pcardsuccess * 100) {
+        printf("The reservation for customer %d could not be accepted because the credit card transaction was not approved.\n",args->transID);
         flag = true;
     }
 
     if(flag){
-        pthread_mutex_unlock(&Mtest);
-        pthread_mutex_lock(&Moperator);
-        operator++;
+        pthread_mutex_unlock(&Mtest2);
+        pthread_mutex_lock(&Mcashier);
+        cashier++;
         pthread_cond_signal(&cond);
-        pthread_mutex_unlock(&Moperator);
-        pthread_exit(thread);
+        pthread_mutex_unlock(&Mcashier);
+        pthread_exit(NULL);
     }
 
-    for (int i = sCounter; i < sCounter + randSeats ; i++) seats[i] = *thread;
+    for (int i = sCounter; i < sCounter + args->seats ; i++) seats[i] = args->transID;
 
     int temp = sCounter + 1;
-    sCounter += randSeats;
+    sCounter += args->seats;
     int temp2 = sCounter;
 
-    pthread_mutex_unlock(&Mtest);
+    pthread_mutex_unlock(&Mtest2);
 
     pthread_mutex_lock(&MtotInc);
-    totInc += randSeats * Cseat;
+    totInc += args->seats * args->cseats;
     pthread_mutex_unlock(&MtotInc);
 
     pthread_mutex_lock(&Mtrans);
@@ -162,15 +251,16 @@ void *Reservation(void *threadId) {
     pthread_mutex_unlock(&Mtrans);
 
     pthread_mutex_lock(&Mprint);
-    pthread_mutex_lock(&Mtest);
-    printf("The reservation was successful for customer %d with id %d, your seats are [%d", *thread , TransId , temp);
+    pthread_mutex_lock(&Mtest2);
+    printf("The reservation was successful for customer %d with id %d, your seats are [%d", args->transID , TransId , temp);
     for(int i = temp + 1; i <= temp2; i++) printf(",%d", i);
-    printf("] and the transaction cost is %d euros.\n", randSeats * Cseat);
+    printf("] and the transaction cost is %d euros.\n", args->seats * args->cseats);
     pthread_mutex_unlock(&Mprint);
-    pthread_mutex_unlock(&Mtest);
-    pthread_mutex_lock(&Moperator);
-    operator++;
+    pthread_mutex_unlock(&Mtest2);
+
+    pthread_mutex_lock(&Mcashier);
+    cashier++;
     pthread_cond_signal(&cond);
-    pthread_mutex_unlock(&Moperator);
-    pthread_exit(thread);
+    pthread_mutex_unlock(&Mcashier);
+    pthread_exit(NULL);
 }
