@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "C:/Users/Drazor/CLionProjects/operating-systems1/p3150134-p3140137-res1.c" "C:/Users/Drazor/CLionProjects/operating-systems1/cmake-build-debug/CMakeFiles/operating_systems1.dir/p3150134-p3140137-res1.c.obj"
+  "C:/Users/Drazor/CLionProjects/operating-systems1/p3150134-p3140137-res2.c" "C:/Users/Drazor/CLionProjects/operating-systems1/cmake-build-debug/CMakeFiles/operating_systems1.dir/p3150134-p3140137-res2.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
