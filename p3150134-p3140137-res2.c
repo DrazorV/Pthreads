@@ -70,11 +70,11 @@ int main(int argc, char *argv[]) {
 
     Args *res[Ncust];
     for (i = 0; i < Ncust; i++) {
-        pthread_join(threads[i], &res[i]);
+        pthread_join(threads[i], (void **) &res[i]);
         pthread_create(&threads2[i], NULL, Transaction, res[i]);
     }
 
-    for (i = 0; i < Ncust; i++)pthread_join(threads2[i], res[i]);
+    for (i = 0; i < Ncust; i++)pthread_join(threads2[i], (void **) res[i]);
 
 
     for (i= 0; i < MaxSeats; i++) {
@@ -107,7 +107,6 @@ void *Reservation(void *threadId) {
     time_t start_time , mid_time , end_time;
     clock_gettime(CLOCK_REALTIME, &start);
     start_time = start.tv_sec;
-
 
     unsigned int n = (unsigned int) (RandomSeed * (*thread) * (int) time(NULL));
     rand_r(&n);
