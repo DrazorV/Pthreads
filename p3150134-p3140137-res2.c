@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include "p3150134-p3140137-res2.h"
 
-int * seats , totInc , totW8 , totServ , operator, cashier , sCounter , transcount , RandomSeed, MaxSeats = (NzoneA + NzoneB + NzoneC)*Nseat;
+int * seats , totInc , totW8 , totW82, totServ , totServ2, operator, cashier , sCounter , RandomSeed, MaxSeats = (NzoneA + NzoneB + NzoneC)*Nseat;
 void *Reservation(void *threadId);
 void *Transaction(void *arguments);
 
@@ -20,11 +20,12 @@ typedef struct arg_struct {
     int seats;
     int cseats;
     int transID;
+    unsigned long rand;
 } Args;
 
 int main(int argc, char *argv[]) {
     //THREAD_ARGS threadArgs;
-    totInc = 0, transcount = 1, totW8 = 0, totServ = 0, sCounter = 0;
+    totInc = 0, totW8 = 0,totW82 = 0, totServ = 0,totServ2 = 0, sCounter = 0;
     operator = Ntel;
     cashier = Ncash;
 
@@ -77,15 +78,23 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < Ncust; i++)pthread_join(threads2[i], (void **) res[i]);
 
 
-    for (i= 0; i < MaxSeats; i++) {
+    for (i = 0; i < NzoneA * 10; i++) {
         if(seats[i] == -1) printf("Seat %d is empty\n", i + 1);
-        else printf("Seat %d is taken from Customer %d\n", i + 1, (seats[i]));
+        else printf("Zone %c / Seat %d / Customer %d\n", 'A', i + 1, seats[i]);
+    }
+    for (i = NzoneA * 10 ; i < (NzoneB + NzoneA) * 10; i++) {
+        if(seats[i] == -1) printf("Seat %d is empty\n", i + 1);
+        else printf("Zone %c / Seat %d / Customer %d\n", 'B', i + 1, seats[i]);
+    }
+    for (i = (NzoneB + NzoneA) * 10; i < (NzoneB + NzoneA + NzoneC) * 10; i++) {
+        if(seats[i] == -1) printf("Seat %d is empty\n", i + 1);
+        else printf("Zone %c / Seat %d / Customer %d\n", 'C', i + 1, seats[i]);
     }
 
     printf("Total Income: %d euros.\n", totInc);
-    printf("Average waiting time: %f.\n", (double)totW8/(double)Ncust);
-    printf("Average service time: %f.\n\n", (double)totServ/(double)Ncust);
-
+    printf("Average service time: %f seconds.\n", ((double) totServ + (double) totServ2) /(double)Ncust);
+    printf("Average waiting operator time: %f seconds.\n", (double)totW8/(double)Ncust);
+    printf("Average waiting cashier time: %f seconds.\n", (double)totW82/(double)Ncust);
 
     pthread_mutex_destroy(&Moperator);
     pthread_mutex_destroy(&MtotInc);
@@ -125,10 +134,10 @@ void *Reservation(void *threadId) {
 
     int Cseat;
     char zone;
-    if(randZone <= 20){
+    if(randZone <= PzoneA * 100){
         Cseat = CzoneA;
         zone = 'A';
-    }else if (randZone <= 60){
+    }else if (randZone <= (PzoneB + PzoneA) * 100){
         Cseat = CzoneB;
         zone = 'B';
     }else{
@@ -145,74 +154,55 @@ void *Reservation(void *threadId) {
     clock_gettime(CLOCK_REALTIME,&end);
     end_time = end.tv_sec;
 
-
     pthread_mutex_lock(&MtotServ);
     totServ += end_time - start_time;
     pthread_mutex_unlock(&MtotServ);
 
-    pthread_mutex_lock(&Mtest);
-    bool flag = false;
-
-    if (sCounter == MaxSeats){
-        printf("The reservation for customer %d could not be accepted because the theater is full.\n", *thread);
-        flag = true;
-    }else if (sCounter + randSeats > MaxSeats){
-        printf("The reservation for customer %d could not be accepted because there are not available seats.\n", *thread);
-        flag = true;
-    }
-
-    pthread_mutex_unlock(&Mtest);
     pthread_mutex_lock(&Moperator);
     operator++;
     pthread_cond_signal(&cond);
     pthread_mutex_unlock(&Moperator);
-
-    if(flag){
-        pthread_exit(0);
-    }else{
-        Args *args = malloc(sizeof(Args));
-        args->zone = zone;
-        args->seats = randSeats;
-        args->transID = *thread;
-        args->cseats = Cseat;
-        pthread_exit(args);
-    }
+    Args *args = malloc(sizeof(Args));
+    args->zone = zone;
+    args->seats = randSeats;
+    args->transID = *thread;
+    args->cseats = Cseat;
+    args->rand = n;
+    pthread_exit(args);
 }
 
 void *Transaction(void *arguments) {
     Args *args = arguments;
     struct timespec start, mid, end;
-    time_t start_time , mid_time , end_time;
+    time_t start_time, mid_time, end_time;
     clock_gettime(CLOCK_REALTIME, &start);
     start_time = start.tv_sec;
 
-    unsigned int n2 = (unsigned int) (RandomSeed * (int) time(NULL));
-    rand_r(&n2);
-    unsigned int randTime = n2 % (tCashHigh - tCashLow + 1) + tCashLow;
-    int randSuccess = n2 % 100;
+    unsigned int randTime = args->rand % (tCashHigh - tCashLow + 1) + tCashLow;
+    int randSuccess = args->rand % 100;
 
     pthread_mutex_lock(&Mcashier);
 
     while (cashier == 0) pthread_cond_wait(&cond, &Mcashier);
 
-    clock_gettime(CLOCK_REALTIME,&mid);
+    clock_gettime(CLOCK_REALTIME, &mid);
     mid_time = mid.tv_sec;
 
     cashier--;
     pthread_mutex_unlock(&Mcashier);
 
     pthread_mutex_lock(&MtotW82);
-    totW8 += mid_time - start_time;
+    totW82 += mid_time - start_time;
     pthread_mutex_unlock(&MtotW82);
 
     sleep(randTime);
 
-    clock_gettime(CLOCK_REALTIME,&end);
+    clock_gettime(CLOCK_REALTIME, &end);
     end_time = end.tv_sec;
 
 
     pthread_mutex_lock(&MtotServ2);
-    totServ += end_time - start_time;
+    totServ2 += end_time - start_time;
     pthread_mutex_unlock(&MtotServ2);
 
     pthread_mutex_lock(&Mtest2);
@@ -224,7 +214,7 @@ void *Transaction(void *arguments) {
         flag = true;
     }
 
-    if(flag){
+    if (flag) {
         pthread_mutex_unlock(&Mtest2);
         pthread_mutex_lock(&Mcashier);
         cashier++;
@@ -234,7 +224,7 @@ void *Transaction(void *arguments) {
     }
     int temp3 = 0;
     int temp4 = 0;
-    switch(args->zone){
+    switch (args->zone) {
         case 'A' :
             temp3 = 0;
             temp4 = NzoneA * 10 - 1;
@@ -248,50 +238,32 @@ void *Transaction(void *arguments) {
             temp4 = (NzoneA + NzoneB + NzoneC) * 10 - 1;
             break;
     }
-
-
-
+    int counter = 0;
     for(int k = temp3; k < temp4; k++){
-        if(seats[k] != -1){
-            temp3 = k + 1;
-        }else{
-            if (k == temp3 + args->seats - 1) {
-                if ((int) k / 10 == (int) (k - args->seats + 1)/ 10){
+        if(seats[k] == -1){
+            counter++;
+            if (counter == args->seats) {
+                if ((k / 10) % 10 == ((k - args->seats + 1) / 10) % 10){
+                    printf("The reservation was successful for customer %d with seats [", args->transID);
                     for (int l = k; l > k - args->seats; l--) {
+                        printf(" (%d) ", l);
                         seats[l] = args->transID;
-                        printf("seats[%d] = %d\n", l + 1, seats[l]);
                     }
+                    printf("] and the transaction cost is %d euros.\n", args->seats * args->cseats);
+                    pthread_mutex_lock(&MtotInc);
+                    totInc += args->seats * args->cseats;
+                    pthread_mutex_unlock(&MtotInc);
+                    break;
+                } else {
+                    k = (k / 10) * 10 - 1;
+                    counter = 0;
                 }
-            } else if (k > temp3 + args->seats -1) break;
-        }
+            }
+        }else counter = 0;
+        if (k == temp4 - 1) printf("The reservation for customer %d could not be accepted because Zone%c doesn't have more seats.\n",args->transID,args->zone);
     }
 
-
-
-    int temp = sCounter + 1;
-    sCounter += args->seats;
-    int temp2 = sCounter;
-
     pthread_mutex_unlock(&Mtest2);
-
-    pthread_mutex_lock(&MtotInc);
-    totInc += args->seats * args->cseats;
-    pthread_mutex_unlock(&MtotInc);
-
-//    pthread_mutex_lock(&Mtrans);
-//    int TransId = transcount;
-//    transcount++;
-//    pthread_mutex_unlock(&Mtrans);
-
-    pthread_mutex_lock(&Mprint);
-    pthread_mutex_lock(&Mtest2);
-    //printf("%d%d%d%d",args->zone,args->transID);
-//    printf("The reservation was successful for customer %d with id %d, your seats are [%d", args->transID , TransId , temp);
-//    for(int i = temp + 1; i <= temp2; i++) printf(",%d", i);
-//    printf("] and the transaction cost is %d euros.\n", args->seats * args->cseats);
-    pthread_mutex_unlock(&Mprint);
-    pthread_mutex_unlock(&Mtest2);
-
     pthread_mutex_lock(&Mcashier);
     cashier++;
     pthread_cond_signal(&cond);
