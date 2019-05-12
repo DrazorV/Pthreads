@@ -34,6 +34,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a47c0c9-b3eb-4aee-b6d1-197c87e3809e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/p3150134-p3140137-res2.c" beforeDir="false" afterPath="$PROJECT_DIR$/p3150134-p3140137-res2.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -52,8 +53,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/p3150134-p3140137-res2.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="41" column="17" lean-forward="true" selection-start-line="41" selection-start-column="17" selection-end-line="41" selection-end-column="17" />
+            <state relative-caret-position="282">
+              <caret line="247" column="32" lean-forward="true" selection-start-line="247" selection-start-column="32" selection-end-line="247" selection-end-column="32" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -64,8 +65,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/p3150134-p3140137-res2.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+            <state relative-caret-position="153">
+              <caret line="9" column="67" selection-start-line="9" selection-start-column="61" selection-end-line="9" selection-end-column="67" />
             </state>
           </provider>
         </entry>
@@ -74,11 +75,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>randomSeats</find>
-      <find>threads</find>
-      <find>cond_wait</find>
-      <find>thread</find>
-      <find>countArray</find>
       <find>threadc</find>
       <find>/</find>
       <find>transactionCounter</find>
@@ -104,6 +100,11 @@
       <find>temp</find>
       <find>TransId</find>
       <find>transcount</find>
+      <find>totServ</find>
+      <find>Mtest</find>
+      <find>Mtrans</find>
+      <find>MtotServ</find>
+      <find>MtotInc</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -158,6 +159,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
@@ -199,7 +201,8 @@
       <workItem from="1555234063127" duration="30832000" />
       <workItem from="1557302803740" duration="10728000" />
       <workItem from="1557390890532" duration="116000" />
-      <workItem from="1557391284491" duration="15503000" />
+      <workItem from="1557391284491" duration="30393000" />
+      <workItem from="1557478396530" duration="5619000" />
     </task>
     <task id="LOCAL-00001" summary="New repo">
       <created>1554809768068</created>
@@ -236,11 +239,25 @@
       <option name="project" value="LOCAL" />
       <updated>1557405568752</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="STAGE 2">
+      <created>1557407058811</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1557407058811</updated>
+    </task>
+    <task id="LOCAL-00007" summary="STAGE 2">
+      <created>1557422015005</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1557422015005</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61965000" />
+    <option name="totallyTimeSpent" value="82474000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -255,7 +272,7 @@
     <frame x="-7" y="-7" width="2308" height="935" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.117882565" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.117882565" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -269,14 +286,14 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="LuaJ" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Debug" order="5" weight="0.42393237" />
+      <window_info anchor="right" id="Debug" order="5" weight="0.47953737" />
       <window_info anchor="right" id="TODO" order="6" />
       <window_info anchor="right" id="TeamCity" order="7" />
       <window_info anchor="right" id="Messages" order="8" weight="0.3225089" />
       <window_info anchor="right" id="Terminal" order="9" weight="0.32873666" />
       <window_info anchor="right" id="Version Control" order="10" />
       <window_info anchor="right" id="CMake" order="11" weight="0.32962632" />
-      <window_info anchor="right" id="Run" order="12" weight="0.4653025" />
+      <window_info anchor="right" id="Run" order="12" weight="0.4644128" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -295,39 +312,109 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
-          <line>257</line>
-          <option name="timeStamp" value="85" />
+          <line>252</line>
+          <option name="timeStamp" value="177" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
-          <line>262</line>
-          <option name="timeStamp" value="99" />
+          <line>253</line>
+          <option name="timeStamp" value="178" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
-          <line>260</line>
-          <option name="timeStamp" value="100" />
+          <line>162</line>
+          <option name="timeStamp" value="179" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
-          <line>259</line>
-          <option name="timeStamp" value="103" />
+          <line>164</line>
+          <option name="timeStamp" value="180" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
-          <line>261</line>
-          <option name="timeStamp" value="105" />
+          <line>181</line>
+          <option name="timeStamp" value="182" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
-          <line>258</line>
-          <option name="timeStamp" value="106" />
+          <line>165</line>
+          <option name="timeStamp" value="183" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>166</line>
+          <option name="timeStamp" value="184" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>167</line>
+          <option name="timeStamp" value="185" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>169</line>
+          <option name="timeStamp" value="186" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>170</line>
+          <option name="timeStamp" value="188" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>173</line>
+          <option name="timeStamp" value="189" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>174</line>
+          <option name="timeStamp" value="190" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>168</line>
+          <option name="timeStamp" value="191" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>176</line>
+          <option name="timeStamp" value="192" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>177</line>
+          <option name="timeStamp" value="193" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/p3150134-p3140137-res2.c</url>
+          <line>171</line>
+          <option name="timeStamp" value="194" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>seats[k]</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>k - randSeats</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>temp3 + args-&gt;seats - 1</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>k &gt; temp3 + args-&gt;seats - 1</expression-string>
+        <language-id>ObjectiveC</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>k - args-&gt;seats</expression-string>
         <language-id>ObjectiveC</language-id>
@@ -350,26 +437,6 @@
       </expression>
       <expression>
         <expression-string>(int) k/10 == (int) temp3/10</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>if( (int) k/10 == (int) temp3/10)</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>&amp;RandomSeed</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>RandomSeed</expression-string>
-        <language-id>ObjectiveC</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>operator</expression-string>
         <language-id>ObjectiveC</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -409,15 +476,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/p3150134-p3140137-res2.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
+        <state relative-caret-position="153">
+          <caret line="9" column="67" selection-start-line="9" selection-start-column="61" selection-end-line="9" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa22140.27661/p3150134-p3140137-res1.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="167" column="20" selection-start-line="167" selection-start-column="16" selection-end-line="167" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/p3150134-p3140137-res2.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="41" column="17" lean-forward="true" selection-start-line="41" selection-start-column="17" selection-end-line="41" selection-end-column="17" />
+        <state relative-caret-position="282">
+          <caret line="247" column="32" lean-forward="true" selection-start-line="247" selection-start-column="32" selection-end-line="247" selection-end-column="32" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
