@@ -96,6 +96,7 @@ int main(int argc, char *argv[]) {
     printf("Average service time: %f seconds.\n", ((double) totServ + (double) totServ2) /(double)Ncust);
     printf("Average waiting operator time: %f seconds.\n", (double)totW8/(double)Ncust);
     printf("Average waiting cashier time: %f seconds.\n", (double)totW82/(double)Ncust);
+    printf("From the 100 customers %d chose zoneA, %d chose zoneB , %d chose zoneC and %d were not accepted",Acounter,Bcounter,Ccounter,Fcounter);
 
     pthread_mutex_destroy(&Moperator);
     pthread_mutex_destroy(&MtotInc);
@@ -104,6 +105,10 @@ int main(int argc, char *argv[]) {
     pthread_mutex_destroy(&Mprint);
     pthread_cond_destroy(&cond);
     pthread_mutex_destroy(&Mtest);
+    pthread_mutex_destroy(&Mcashier);
+    pthread_mutex_destroy(&MtotW82);
+    pthread_mutex_destroy(&MtotServ2);
+    pthread_mutex_destroy(&Mtest2);
 
     free(seats);
     free(threads);
@@ -145,19 +150,16 @@ void *Reservation(void *threadId) {
         zone = 'A';
         temp3 = 0;
         temp4 = NzoneA * 10 - 1;
-        Acounter++;
     }else if (randZone <= (PzoneB + PzoneA) * 100){
         Cseat = CzoneB;
         zone = 'B';
         temp3 = NzoneA * 10;
         temp4 = (NzoneA + NzoneB) * 10 - 1;
-        Bcounter++;
     }else{
         Cseat = CzoneC;
         zone = 'C';
         temp3 = (NzoneA + NzoneB) * 10;
         temp4 = (NzoneA + NzoneB + NzoneC) * 10 - 1;
-        Ccounter++;
     }
     pthread_mutex_lock(&Mtest);
     int position = -1;
@@ -179,7 +181,12 @@ void *Reservation(void *threadId) {
                 }
             }
         }else counter = 0;
-        if (k == temp4 - 1) printf("The reservation for customer %d could not be accepted because Zone%c doesn't have more seats.\n",*thread,zone);
+        if (k == temp4 - 1) {
+            pthread_mutex_lock(&Mprint);
+            Fcounter++;
+            printf("The reservation for customer %d could not be accepted because Zone%c doesn't have more seats.\n",*thread,zone);
+            pthread_mutex_unlock(&Mprint);
+        }
     }
     pthread_mutex_unlock(&Mtest);
 
@@ -252,6 +259,9 @@ void *Transaction(void *arguments) {
         pthread_mutex_lock(&Mtest);
         for(int j = args->position; j < args->position + args->seats; j++) seats[j] = -1;
         printf("The reservation for customer %d could not be accepted because the credit card transaction was not approved. We are canceling the order.\n",args->transID);
+        pthread_mutex_lock(&Mprint);
+        Fcounter++;
+        pthread_mutex_unlock(&Mprint);
         pthread_mutex_unlock(&Mtest);
     }else{
         pthread_mutex_lock(&Mprint);
@@ -262,6 +272,13 @@ void *Transaction(void *arguments) {
         pthread_mutex_lock(&MtotInc);
         billId++;
         totInc += args->cseats * args->seats;
+        if(args->position < 51){
+            Acounter++;
+        } else if (args->position < 151){
+            Bcounter++;
+        } else if (args->position < 251){
+            Ccounter++;
+        }
         pthread_mutex_unlock(&MtotInc);
     }
 
