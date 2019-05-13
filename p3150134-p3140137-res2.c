@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include "p3150134-p3140137-res2.h"
 
-int * seats , totInc , totW8 , totW82, totServ , totServ2, operator, cashier , RandomSeed , MaxSeats , Acounter , Bcounter , Ccounter , Fcounter;
+int * seats , totInc , totW8 , totW82, totServ , totServ2, operator, cashier , RandomSeed , MaxSeats , NoPos , NoSeqPos , FailCard , Success;
 void *Reservation(void *threadId);
 void *Transaction(void *arguments);
 
@@ -26,7 +26,7 @@ typedef struct arg_struct {
 int main(int argc, char *argv[]) {
     //THREAD_ARGS threadArgs;
     totInc = 0, totW8 = 0,totW82 = 0, totServ = 0,totServ2 = 0, billId = 0;
-    Acounter = 0 , Bcounter = 0 , Ccounter = 0 , Fcounter = 0;
+    NoPos = 0 , NoSeqPos = 0 , FailCard = 0 , Success = 0;
     operator = Ntel;
     cashier = Ncash;
 
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
     printf("Average service time: %f seconds.\n", ((double) totServ + (double) totServ2) /(double)Ncust);
     printf("Average waiting operator time: %f seconds.\n", (double)totW8/(double)Ncust);
     printf("Average waiting cashier time: %f seconds.\n", (double)totW82/(double)Ncust);
-    printf("From the 100 customers %d chose zoneA, %d chose zoneB , %d chose zoneC and %d were not accepted",Acounter,Bcounter,Ccounter,Fcounter);
+    printf("From the 100 customer orders:\n %d orders were successful \n %d orders were canceled due to card errors \n %d orders were canceled because theater was full \n %d orders were canceled because seats were not sequential",Success,FailCard,NoSeqPos,NoPos);
 
     pthread_mutex_destroy(&Moperator);
     pthread_mutex_destroy(&MtotInc);
@@ -137,9 +137,6 @@ void *Reservation(void *threadId) {
     operator--;
     pthread_mutex_unlock(&Moperator);
 
-
-
-
     int temp3 = 0;
     int temp4 = 0;
 
@@ -164,9 +161,11 @@ void *Reservation(void *threadId) {
     pthread_mutex_lock(&Mtest);
     int position = -1;
     int counter = 0;
+    int counter2 = 0;
     for(int k = temp3; k < temp4; k++){
         if(seats[k] == -1){
             counter++;
+            counter2++;
             if (counter == randSeats) {
                 if ((k / 10) % 10 == ((k - randSeats + 1) / 10) % 10){
                     int l;
@@ -183,7 +182,11 @@ void *Reservation(void *threadId) {
         }else counter = 0;
         if (k == temp4 - 1) {
             pthread_mutex_lock(&Mprint);
-            Fcounter++;
+            if(counter2 >= randSeats){
+                NoSeqPos++;
+            }else{
+                NoPos++;
+            }
             printf("The reservation for customer %d could not be accepted because Zone%c doesn't have more seats.\n",*thread,zone);
             pthread_mutex_unlock(&Mprint);
         }
@@ -260,7 +263,7 @@ void *Transaction(void *arguments) {
         for(int j = args->position; j < args->position + args->seats; j++) seats[j] = -1;
         printf("The reservation for customer %d could not be accepted because the credit card transaction was not approved. We are canceling the order.\n",args->transID);
         pthread_mutex_lock(&Mprint);
-        Fcounter++;
+        FailCard++;
         pthread_mutex_unlock(&Mprint);
         pthread_mutex_unlock(&Mtest);
     }else{
@@ -272,13 +275,7 @@ void *Transaction(void *arguments) {
         pthread_mutex_lock(&MtotInc);
         billId++;
         totInc += args->cseats * args->seats;
-        if(args->position < 51){
-            Acounter++;
-        } else if (args->position < 151){
-            Bcounter++;
-        } else if (args->position < 251){
-            Ccounter++;
-        }
+        Success++;
         pthread_mutex_unlock(&MtotInc);
     }
 
